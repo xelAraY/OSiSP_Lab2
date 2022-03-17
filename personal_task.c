@@ -1,8 +1,3 @@
-#define ALL_OK 0
-#define DIR_NOT_EXIST 1
-#define OTHER (14-12) 
-#define INCORRECT_DIRECTORY 25
-
 #include <stdio.h>
 #include <malloc.h>
 #include <dirent.h>
@@ -12,7 +7,11 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
-#include <math.h>
+
+#define ALL_OK 0
+#define DIR_NOT_EXIST 1
+#define OTHER (14-12) 
+#define INCORRECT_DIRECTORY 25
 
 struct fileInfo {
     char* name;
