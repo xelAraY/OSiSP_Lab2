@@ -7,6 +7,18 @@ N - amount of rows
 N = 0 - all text
 */
 
+int strToInt(char* str)
+{
+    int res = 0;
+    for (int i = 0; i < strlen(str); i++)
+        if (str[i] >= '0' && str[i] <= '9') 
+            res = 10 * res + str[i] - '0';
+        else 
+            return -1;
+
+    return res;
+}
+
 int main(int argc, char const *argv[])
 {
     // less of arguments
@@ -17,8 +29,9 @@ int main(int argc, char const *argv[])
 		return 1;
 	}
 
-    int lines_count = strtol(argv[2], NULL, 10);
-    if(lines_count < 0){
+    int lines_count = strToInt(argv[2]);
+
+    if(lines_count < 0 || lines_count == -1){
         fprintf(stderr, "Invalid count of lines.\n");
         return 1;
     }
