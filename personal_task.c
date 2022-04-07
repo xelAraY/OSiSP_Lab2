@@ -7,6 +7,8 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
+#include <stdlib.h>
+#include <limits.h>
 
 #define ALL_OK 0
 #define DIR_NOT_EXIST 1
@@ -32,15 +34,6 @@ int numLen(int ind){
         ind /= 10;
     }
     return length;
-}
-
-int strToInt(char* str)
-{
-    int res = 0;
-    for (int i = 0; i < strlen(str); i++)
-        if (str[i] >= '0' && str[i] <= '9') res = 10 * res + str[i] - '0';
-
-    return res;
 }
 
 int compareSize(TFILE_INFO_NODE* p1, TFILE_INFO_NODE* p2)
@@ -225,7 +218,28 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    int code = strToInt(argv[2]);
+    char* endptr;
+    char* N = argv[2];
+
+    int code = strtol(N, &endptr, 10);
+
+    if ((errno == ERANGE && (code == LONG_MAX || code == LONG_MIN)) || (errno != 0 && code == 0)) {
+        fprintf(stderr, "You entered wrong group size:\n");
+        fprintf(stderr, "Out of range...\n");
+        return -2;
+    }
+
+    if (endptr == N) {
+        fprintf(stderr, "You entered wrong group size:\n");
+        fprintf(stderr, "It should have int value>0, if you want output by groups of lines or it should be 0, if you want solid text\n");
+        return -2;
+    }
+
+    if(code < 0){
+        fprintf(stderr, "Invalid count of lines.\n");
+        return 1;
+    }
+
     int (*compFunc) (TFILE_INFO_NODE*, TFILE_INFO_NODE*);
     if (code == 1)
         compFunc = compareSize;

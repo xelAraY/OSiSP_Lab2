@@ -1,8 +1,4 @@
 #include <stdio.h>
-/*
-Input symbols from keyboard and write to file
-ctrl+F - exit
-*/
 
 const int stopChar = 6;
 

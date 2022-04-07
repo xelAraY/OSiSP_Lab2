@@ -1,8 +1,5 @@
 #include <stdio.h>
 #include <dirent.h>
-/*
-Print root and selected catalog
-*/
 
 int print_directory(char const *dir_name);
 
@@ -17,7 +14,6 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-// returns 0 if call is successful
 int print_directory(char const *dir_name){
     DIR *current_dir = opendir(dir_name);
     if(!current_dir){

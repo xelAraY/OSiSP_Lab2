@@ -1,37 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-/*
-Print from file
-N - amount of rows
-N = 0 - all text
-*/
-
-int strToInt(char* str)
-{
-    int res = 0;
-    for (int i = 0; i < strlen(str); i++)
-        if (str[i] >= '0' && str[i] <= '9') 
-            res = 10 * res + str[i] - '0';
-        else 
-            return -1;
-
-    return res;
-}
+#include <string.h>
+#include <errno.h>
+#include <limits.h>
 
 int main(int argc, char const *argv[])
 {
-    // less of arguments
 	if(argc != 3){
 		fprintf(stderr, "Invalid arguments.\nCommand format: %s filename lines_count\n", argv[0]);
         fprintf(stderr, "filename: name of file to read.\n");
         fprintf(stderr, "lines_count: count of lines in block to read.\nEnter 0 to read file in one moment.\n");
 		return 1;
 	}
+    
+    char* endptr;
+    char* N = argv[2];
 
-    int lines_count = strToInt(argv[2]);
+    int lines_count = strtol(N, &endptr, 10);
 
-    if(lines_count < 0 || lines_count == -1){
+    if ((errno == ERANGE && (lines_count == LONG_MAX || lines_count == LONG_MIN)) || (errno != 0 && lines_count == 0)) {
+        fprintf(stderr, "You entered wrong group size:\n");
+        fprintf(stderr, "Out of range...\n");
+        return -2;
+    }
+
+    if (endptr == N) {
+        fprintf(stderr, "You entered wrong group size:\n");
+        fprintf(stderr, "It should have int value>0, if you want output by groups of lines or it should be 0, if you want solid text\n");
+        return -2;
+    }
+
+    if(lines_count < 0){
         fprintf(stderr, "Invalid count of lines.\n");
         return 1;
     }
@@ -44,7 +43,6 @@ int main(int argc, char const *argv[])
 
     int i = 0;
     while((i < lines_count || lines_count == 0)){
-        // Reading
         char c;
         do{
             c = fgetc(file);

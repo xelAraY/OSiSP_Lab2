@@ -1,12 +1,8 @@
 #include <stdio.h>
 #include "sys/stat.h"
-/*
-Copy one file to another
-*/
 
 int main(int argc, char const *argv[])
 {
-    // less of arguments
     if(argc != 3){
         fprintf(stderr, "Invalid count of arguments!\n");
         fprintf(stderr, "Command format: %s file1 file2\n", argv[0]);
@@ -29,7 +25,6 @@ int main(int argc, char const *argv[])
 
     int return_code = 0;
 
-    // Rights copy
     struct stat file_stat;
     if(stat(argv[1], &file_stat)){
         perror("stat");
